@@ -3,18 +3,13 @@ package pet.project.spark;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pet.project.spark.model.config.Config;
-import pet.project.spark.model.config.db.DatabaseConfig;
-import pet.project.spark.model.config.redis.RedisConfig;
-import pet.project.spark.model.config.session.SessionConfig;
 import pet.project.spark.util.config.ConfigManager;
 import pet.project.spark.util.db.Database;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import java.util.HashMap;
-
 public class Main {
-    private static Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
         try {
