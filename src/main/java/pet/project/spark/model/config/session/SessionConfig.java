@@ -1,9 +1,11 @@
 package pet.project.spark.model.config.session;
 
+import com.google.gson.annotations.SerializedName;
+
 public class SessionConfig {
-    private long ttl; // seconds
-    private String prefix;
-    private String cookieName;
+    @SerializedName("session_ttl") private long ttl; // seconds
+    @SerializedName("session_prefix") private String prefix;
+    @SerializedName("cookie_name") private String cookieName;
 
     public SessionConfig(long ttl, String prefix, String cookieName) {
         this.ttl = ttl;

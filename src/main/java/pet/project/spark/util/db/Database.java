@@ -6,7 +6,7 @@ import pet.project.spark.model.config.db.DatabaseConfig;
 import java.sql.*;
 
 public class Database {
-    private static Logger LOG = LoggerFactory.getLogger(Database.class);
+    private Logger LOG = LoggerFactory.getLogger(Database.class);
     private DatabaseConfig conf;
 
     private Connection conn;

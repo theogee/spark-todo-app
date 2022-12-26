@@ -1,8 +1,10 @@
 package pet.project.spark.model.config.redis;
 
+import com.google.gson.annotations.SerializedName;
+
 public class RedisConfig {
-    private String host;
-    private int port;
+    @SerializedName("redis_host") private String host;
+    @SerializedName("redis_port") private int port;
 
     public RedisConfig(String host, int port) {
         this.host = host;

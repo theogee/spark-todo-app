@@ -17,7 +17,7 @@ import spark.Response;
 
 
 public class Router {
-    private final static Logger LOG = LoggerFactory.getLogger(Router.class);
+    private final Logger LOG = LoggerFactory.getLogger(Router.class);
     private final HttpHandler httpHandler;
     private Config config;
     private final Gson gson = new Gson();

@@ -1,10 +1,12 @@
 package pet.project.spark.model.config.db;
 
+import com.google.gson.annotations.SerializedName;
+
 public class DatabaseConfig {
-    private String user;
-    private String password;
-    private String database;
-    private String host;
+    @SerializedName("db_user") private String user;
+    @SerializedName("db_password") private String password;
+    @SerializedName("db_name") private String database;
+    @SerializedName("db_host") private String host;
 
     public DatabaseConfig(String user, String password, String database, String host) {
         this.user = user;

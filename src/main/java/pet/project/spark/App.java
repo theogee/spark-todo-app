@@ -31,7 +31,7 @@ public class App {
 
         Router router = new Router(this.config, httpHandler);
 
-        port(9000);
+        port(config.getSparkConfig().getPort());
         router.register();
     }
 }

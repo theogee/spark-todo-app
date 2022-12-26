@@ -1,0 +1,20 @@
+{
+  "spark_config": {
+    "spark_port": 9000
+  },
+  "db_config": {
+    "db_user": "",
+    "db_password": "",
+    "db_name": "spark-todo-app",
+    "db_host": "localhost"
+  },
+  "redis_config": {
+    "redis_host": "localhost",
+    "redis_port": 6379
+  },
+  "session_config": {
+    "session_ttl": 300,
+    "session_prefix": "session_id:",
+    "cookie_name": "todo.sid"
+  }
+}

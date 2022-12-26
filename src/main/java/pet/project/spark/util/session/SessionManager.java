@@ -8,7 +8,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 public class SessionManager {
-    private static Logger LOG = LoggerFactory.getLogger(SessionManager.class);
+    private Logger LOG = LoggerFactory.getLogger(SessionManager.class);
     private JedisPool redisPool;
 
     private Config config;

@@ -19,7 +19,7 @@ import pet.project.spark.util.response.ResponseManager;
 import java.util.ArrayList;
 
 public class HttpHandler {
-    private static Logger LOG = LoggerFactory.getLogger(HttpHandler.class);
+    private Logger LOG = LoggerFactory.getLogger(HttpHandler.class);
     private TodoUsecase todoUsecase;
     private SessionManager sessionManager;
     private Config config;
@@ -123,7 +123,7 @@ public class HttpHandler {
             // set session
             String sessionID = req.session().id();
             sessionManager.setSession(sessionID, Integer.toString(user.getUserID()));
-            res.cookie("todo.sid", sessionID, (int) config.getSessionConfig().getTtl());
+            res.cookie(config.getSessionConfig().getCookieName(), sessionID, (int) config.getSessionConfig().getTtl());
             loginResponse.setSuccess(true);
             loginResponse.setMessage("login successful");
 
