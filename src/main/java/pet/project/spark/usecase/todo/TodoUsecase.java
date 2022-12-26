@@ -4,9 +4,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pet.project.spark.model.config.Config;
-import pet.project.spark.model.response.http.auth.LoginRequest;
-import pet.project.spark.model.response.http.User;
-import pet.project.spark.model.response.http.auth.RegisterRequest;
+import pet.project.spark.model.http.auth.LoginRequest;
+import pet.project.spark.model.User;
+import pet.project.spark.model.http.auth.RegisterRequest;
+import pet.project.spark.model.http.task.CreateTaskRequest;
 import pet.project.spark.repo.todo.TodoRepo;
 
 public class TodoUsecase {
@@ -52,6 +53,15 @@ public class TodoUsecase {
             return true;
         } catch (Exception e) {
             LOG.error("error registering user. err: " + e);
+            throw e;
+        }
+    }
+
+    public void createTask(CreateTaskRequest data) throws Exception {
+        try {
+            todoRepo.createTask(data.getUserID(), data.getTask());
+        } catch (Exception e) {
+            LOG.error("error calling todoRepo.createTask. err: " + e);
             throw e;
         }
     }

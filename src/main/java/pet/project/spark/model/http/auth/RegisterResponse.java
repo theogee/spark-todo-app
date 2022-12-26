@@ -1,17 +1,9 @@
-package pet.project.spark.model.response.http.auth;
+package pet.project.spark.model.http.auth;
 
-public class LoginResponse {
-    private String message;
+public class RegisterResponse {
     private boolean success;
+    private String message;
     private String error;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public boolean isSuccess() {
         return success;
@@ -19,6 +11,14 @@ public class LoginResponse {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getError() {

@@ -1,6 +1,6 @@
-package pet.project.spark.model.response.http.auth;
+package pet.project.spark.model.http.task;
 
-public class RegisterResponse {
+public class CreateTaskResponse {
     private boolean success;
     private String message;
     private String error;

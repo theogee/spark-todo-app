@@ -1,4 +1,4 @@
-package pet.project.spark.model.response.http;
+package pet.project.spark.model;
 
 import com.google.gson.annotations.SerializedName;
 

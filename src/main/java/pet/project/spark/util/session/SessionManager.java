@@ -3,9 +3,7 @@ package pet.project.spark.util.session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pet.project.spark.Main;
 import pet.project.spark.model.config.Config;
-import pet.project.spark.model.response.http.User;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 

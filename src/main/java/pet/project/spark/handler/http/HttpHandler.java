@@ -4,9 +4,12 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pet.project.spark.model.config.Config;
-import pet.project.spark.model.response.http.auth.*;
-import pet.project.spark.model.response.http.User;
+import pet.project.spark.model.http.auth.*;
+import pet.project.spark.model.User;
+import pet.project.spark.model.http.task.CreateTaskRequest;
+import pet.project.spark.model.http.task.CreateTaskResponse;
 import pet.project.spark.usecase.todo.TodoUsecase;
+import pet.project.spark.util.constant.Constant;
 import pet.project.spark.util.session.SessionManager;
 import spark.Request;
 import spark.Response;
@@ -164,5 +167,33 @@ public class HttpHandler {
         String userID = req.attribute("user.id");
         LOG.info("userID: " + userID);
         return "get task list";
+    }
+
+    public CreateTaskResponse createTask(Request req, Response res) {
+        CreateTaskResponse createTaskResponse = new CreateTaskResponse();
+        try {
+            CreateTaskRequest data = gson.fromJson(req.body(), CreateTaskRequest.class);
+            if (data.getTask().equals("")) {
+                createTaskResponse.setSuccess(false);
+                createTaskResponse.setError("task can't be empty");
+                ResponseManager.setHeaderJSON(400, res);
+                return createTaskResponse;
+            }
+            // inject userID from middleware
+            String userID = req.attribute(Constant.USER_ID_MW);
+            data.setUserID(Integer.parseInt(userID));
+
+            todoUsecase.createTask(data);
+            createTaskResponse.setSuccess(true);
+            createTaskResponse.setMessage("task created successfully");
+            ResponseManager.setHeaderJSON(201, res);
+            return createTaskResponse;
+        } catch (Exception e) {
+            LOG.error("error calling todoUsecase.createTask. err: " + e);
+            createTaskResponse.setSuccess(false);
+            createTaskResponse.setError(e.toString());
+            ResponseManager.setHeaderJSON(500, res);
+            return createTaskResponse;
+        }
     }
 }

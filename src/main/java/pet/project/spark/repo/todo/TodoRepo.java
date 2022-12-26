@@ -3,9 +3,8 @@ package pet.project.spark.repo.todo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pet.project.spark.model.config.Config;
-import pet.project.spark.model.response.http.User;
+import pet.project.spark.model.User;
 import pet.project.spark.util.db.Database;
-import redis.clients.jedis.JedisPool;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -52,7 +51,21 @@ public class TodoRepo {
             st.close();
             LOG.info("user registered successfully. username: " + username);
         } catch (java.sql.SQLException e) {
-            LOG.error("error insert to db. err: " + e);
+            LOG.error("error insert user to db. err: " + e);
+            throw e;
+        }
+    }
+
+    public void createTask(int userID, String task) throws Exception {
+        try {
+            PreparedStatement st = db.getConn().prepareStatement(Query.createTask);
+            st.setInt(1, userID);
+            st.setString(2, task);
+            st.executeUpdate();
+            st.close();
+            LOG.info("task created successfully. userID: " + userID);
+        } catch (java.sql.SQLException e) {
+            LOG.error("error insert task to db. err: " + e);
             throw e;
         }
     }

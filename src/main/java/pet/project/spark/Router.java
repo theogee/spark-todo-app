@@ -7,14 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pet.project.spark.handler.http.HttpHandler;
 import pet.project.spark.model.config.Config;
-import pet.project.spark.model.response.http.InternalServerErrorResponse;
-import pet.project.spark.model.response.http.UnauthorizedResponse;
+import pet.project.spark.model.http.InternalServerErrorResponse;
+import pet.project.spark.model.http.UnauthorizedResponse;
+import pet.project.spark.util.constant.Constant;
 import pet.project.spark.util.response.ResponseManager;
 import spark.HaltException;
 import spark.Request;
 import spark.Response;
-
-import java.util.HashMap;
 
 
 public class Router {
@@ -32,8 +31,9 @@ public class Router {
         before("/task/*", this::authorize);
         before("/logout", this::authorize);
 
-        // CRUD
+        // task CRUD
         get("/task", httpHandler::getTaskList);
+        post("/task", httpHandler::createTask, gson::toJson);
 
         // auth
         post("/register", httpHandler::register, gson::toJson);
@@ -47,7 +47,7 @@ public class Router {
             if (userID == -1) {
                 halt();
             }
-            req.attribute("user.id", Integer.toString(userID));
+            req.attribute(Constant.USER_ID_MW, Integer.toString(userID));
         } catch (HaltException e) {
             ResponseManager.setHeaderJSON(401, res);
             halt(gson.toJson(new UnauthorizedResponse()));
