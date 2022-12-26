@@ -35,6 +35,7 @@ public class Router {
         get("/task", httpHandler::getTaskList, gson::toJson);
         post("/task", httpHandler::createTask, gson::toJson);
         put("/task/:taskID", httpHandler::updateTask, gson::toJson);
+        delete("/task/:taskID", httpHandler::deleteTask, gson::toJson);
 
         // auth
         post("/register", httpHandler::register, gson::toJson);

@@ -260,4 +260,47 @@ public class HttpHandler {
             return updateTaskResponse;
         }
     }
+
+    public DeleteTaskResponse deleteTask(Request req, Response res) {
+        DeleteTaskResponse deleteTaskResponse = new DeleteTaskResponse();
+        try {
+            DeleteTaskRequest data = new DeleteTaskRequest();
+            int taskID = Integer.parseInt(req.params(":taskID"));
+            if (taskID <= 0) {
+                deleteTaskResponse.setSuccess(false);
+                deleteTaskResponse.setError("invalid task_id");
+                ResponseManager.setHeaderJSON(400, res);
+                return deleteTaskResponse;
+            }
+
+            int userID = Integer.parseInt(req.attribute(Constant.USER_ID_MW));
+            data.setTaskID(taskID);
+            data.setUserID(userID);
+
+            boolean isSuccess = todoUsecase.deleteTask(data);
+
+            if (!isSuccess) {
+                deleteTaskResponse.setSuccess(false);
+                deleteTaskResponse.setError("task_id not found");
+                ResponseManager.setHeaderJSON(404, res);
+                return deleteTaskResponse;
+            }
+
+            deleteTaskResponse.setSuccess(true);
+            deleteTaskResponse.setMessage("task_id: " + taskID + " deleted successfully");
+            ResponseManager.setHeaderJSON(200, res);
+            return deleteTaskResponse;
+        } catch(NumberFormatException e) {
+            deleteTaskResponse.setSuccess(false);
+            deleteTaskResponse.setError("invalid task_id format");
+            ResponseManager.setHeaderJSON(400, res);
+            return deleteTaskResponse;
+        } catch (Exception e) {
+            LOG.error("error calling todoUsecase.deleteTask. err: " + e);
+            deleteTaskResponse.setSuccess(false);
+            deleteTaskResponse.setError(e.toString());
+            ResponseManager.setHeaderJSON(500, res);
+            return deleteTaskResponse;
+        }
+    }
 }
