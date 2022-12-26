@@ -42,4 +42,18 @@ public class TodoRepo {
 
         return user;
     }
+
+    public void registerUser(String username, String password) throws Exception {
+        try {
+            PreparedStatement st = db.getConn().prepareStatement(Query.registerUser);
+            st.setString(1, username);
+            st.setString(2, password);
+            st.executeUpdate();
+            st.close();
+            LOG.info("user registered successfully. username: " + username);
+        } catch (java.sql.SQLException e) {
+            LOG.error("error insert to db. err: " + e);
+            throw e;
+        }
+    }
 }

@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pet.project.spark.model.config.Config;
-import pet.project.spark.model.response.http.auth.LoginRequest;
-import pet.project.spark.model.response.http.auth.LoginResponse;
+import pet.project.spark.model.response.http.auth.*;
 import pet.project.spark.model.response.http.User;
-import pet.project.spark.model.response.http.auth.LogoutResponse;
 import pet.project.spark.usecase.todo.TodoUsecase;
 import pet.project.spark.util.session.SessionManager;
 import spark.Request;
@@ -35,6 +33,53 @@ public class HttpHandler {
         } catch (Exception e) {
             LOG.error("error calling sessionManager.getUserIDFromSession. err: " + e);
             throw e;
+        }
+    }
+
+    public RegisterResponse register(Request req, Response res) {
+        RegisterResponse registerResponse = new RegisterResponse();
+        try {
+            RegisterRequest data = gson.fromJson(req.body(), RegisterRequest.class);
+            if (data.getUsername().equals("")) {
+                registerResponse.setSuccess(false);
+                registerResponse.setError("missing username");
+                ResponseManager.setHeaderJSON(400, res);
+                return registerResponse;
+            }
+
+            if (data.getUsername().length() > 11) {
+                registerResponse.setSuccess(false);
+                registerResponse.setError("username can't be longer than 11 characters");
+                ResponseManager.setHeaderJSON(400, res);
+                return registerResponse;
+            }
+
+            if (data.getPassword().equals("")) {
+                registerResponse.setSuccess(false);
+                registerResponse.setError("missing password");
+                ResponseManager.setHeaderJSON(400, res);
+                return registerResponse;
+            }
+
+            boolean isSuccess = todoUsecase.registerUser(data);
+
+            if (!isSuccess) {
+                registerResponse.setSuccess(false);
+                registerResponse.setError("username already exist. please try with a different username");
+                ResponseManager.setHeaderJSON(400, res);
+                return registerResponse;
+            }
+
+            registerResponse.setSuccess(true);
+            registerResponse.setMessage("username: " + data.getUsername() + " registered successfully");
+            ResponseManager.setHeaderJSON(201, res);
+            return registerResponse;
+        } catch (Exception e) {
+            LOG.error("error calling todoUsecase.registerUser. err: " + e);
+            registerResponse.setSuccess(false);
+            registerResponse.setError(e.toString());
+            ResponseManager.setHeaderJSON(500, res);
+            return registerResponse;
         }
     }
 
@@ -114,6 +159,7 @@ public class HttpHandler {
             return logoutResponse;
         }
     }
+
     public String getTaskList(Request req, Response res) {
         String userID = req.attribute("user.id");
         LOG.info("userID: " + userID);

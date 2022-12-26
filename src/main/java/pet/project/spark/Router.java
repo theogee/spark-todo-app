@@ -32,11 +32,13 @@ public class Router {
         before("/task/*", this::authorize);
         before("/logout", this::authorize);
 
+        // CRUD
         get("/task", httpHandler::getTaskList);
 
+        // auth
+        post("/register", httpHandler::register, gson::toJson);
         post("/login", httpHandler::login, gson::toJson);
         post("/logout", httpHandler::logout, gson::toJson);
-
     }
 
     public void authorize(Request req, Response res) {
