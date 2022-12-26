@@ -26,8 +26,9 @@ public class TodoUsecase {
                 LOG.error("user not found. username: " + user.getUsername());
                 return user;
             }
-            if (!user.getPassword().equals(data.getPassword())) {
-                LOG.error("incorrect password");
+
+            if (!BCrypt.checkpw(data.getPassword(), user.getPassword())) {
+                LOG.error("incorrect password for login attempt with username: " + user.getUsername());
                 return new User();
             }
             return user;
