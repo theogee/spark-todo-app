@@ -1,9 +1,11 @@
 package pet.project.spark.model.http.auth;
 
+import com.google.gson.annotations.SerializedName;
+
 public class RegisterResponse {
-    private boolean success;
-    private String message;
-    private String error;
+    @SerializedName("success") private boolean success;
+    @SerializedName("message") private String message;
+    @SerializedName("error") private String error;
 
     public boolean isSuccess() {
         return success;

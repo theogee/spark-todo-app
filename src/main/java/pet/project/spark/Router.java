@@ -32,7 +32,7 @@ public class Router {
         before("/logout", this::authorize);
 
         // task CRUD
-        get("/task", httpHandler::getTaskList);
+        get("/task", httpHandler::getTaskList, gson::toJson);
         post("/task", httpHandler::createTask, gson::toJson);
 
         // auth

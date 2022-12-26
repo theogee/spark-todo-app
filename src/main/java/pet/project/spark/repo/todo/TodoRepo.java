@@ -2,12 +2,14 @@ package pet.project.spark.repo.todo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pet.project.spark.model.Task;
 import pet.project.spark.model.config.Config;
 import pet.project.spark.model.User;
 import pet.project.spark.util.db.Database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 
 public class TodoRepo {
@@ -52,6 +54,27 @@ public class TodoRepo {
             LOG.info("user registered successfully. username: " + username);
         } catch (java.sql.SQLException e) {
             LOG.error("error insert user to db. err: " + e);
+            throw e;
+        }
+    }
+
+    public ArrayList<Task> getTaskList(int userID) throws Exception {
+        try {
+           PreparedStatement st = db.getConn().prepareStatement(Query.getTaskList);
+           st.setInt(1, userID);
+           ResultSet rs = st.executeQuery();
+
+           ArrayList<Task> data = new ArrayList<>();
+           while (rs.next()) {
+               data.add(new Task(rs.getInt(1), rs.getString(2)));
+           }
+
+           rs.close();
+           st.close();
+
+           return data;
+        } catch (java.sql.SQLException e) {
+            LOG.error("error query db. err: " + e);
             throw e;
         }
     }

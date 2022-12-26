@@ -1,8 +1,10 @@
 package pet.project.spark.model.http.auth;
 
+import com.google.gson.annotations.SerializedName;
+
 public class RegisterRequest {
-    private String username;
-    private String password;
+    @SerializedName("username") private String username;
+    @SerializedName("password") private String password;
 
     public RegisterRequest(String username, String password) {
         this.username = username;

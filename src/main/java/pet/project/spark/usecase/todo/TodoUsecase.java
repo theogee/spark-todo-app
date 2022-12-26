@@ -1,14 +1,18 @@
 package pet.project.spark.usecase.todo;
 
+import com.sun.jdi.event.ExceptionEvent;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pet.project.spark.model.Task;
 import pet.project.spark.model.config.Config;
 import pet.project.spark.model.http.auth.LoginRequest;
 import pet.project.spark.model.User;
 import pet.project.spark.model.http.auth.RegisterRequest;
 import pet.project.spark.model.http.task.CreateTaskRequest;
 import pet.project.spark.repo.todo.TodoRepo;
+
+import java.util.ArrayList;
 
 public class TodoUsecase {
     private static Logger LOG = LoggerFactory.getLogger(TodoUsecase.class);
@@ -53,6 +57,15 @@ public class TodoUsecase {
             return true;
         } catch (Exception e) {
             LOG.error("error registering user. err: " + e);
+            throw e;
+        }
+    }
+
+    public ArrayList<Task> getTaskList(int userID) throws Exception {
+        try {
+            return todoRepo.getTaskList(userID);
+        } catch (Exception e) {
+            LOG.error("error calling todoRepo.getTaskList. err: " + e);
             throw e;
         }
     }

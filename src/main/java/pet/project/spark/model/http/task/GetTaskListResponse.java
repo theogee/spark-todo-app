@@ -1,19 +1,14 @@
-package pet.project.spark.model.http.auth;
+package pet.project.spark.model.http.task;
 
 import com.google.gson.annotations.SerializedName;
+import pet.project.spark.model.Task;
 
-public class LoginResponse {
-    @SerializedName("message") private String message;
+import java.util.ArrayList;
+
+public class GetTaskListResponse {
     @SerializedName("success") private boolean success;
+    @SerializedName("data") private ArrayList<Task> data;
     @SerializedName("error") private String error;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public boolean isSuccess() {
         return success;
@@ -21,6 +16,14 @@ public class LoginResponse {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public ArrayList<Task> getData() {
+        return data;
+    }
+
+    public void setData(ArrayList<Task> data) {
+        this.data = data;
     }
 
     public String getError() {

@@ -1,8 +1,10 @@
 package pet.project.spark.model.http.task;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CreateTaskRequest {
-    private String task;
-    private int userID;
+    @SerializedName("task") private String task;
+    private int userID; // injected from middleware
 
     public CreateTaskRequest(String task, int userID) {
         this.task = task;

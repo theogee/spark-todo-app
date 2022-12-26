@@ -3,11 +3,13 @@ package pet.project.spark.handler.http;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pet.project.spark.model.Task;
 import pet.project.spark.model.config.Config;
 import pet.project.spark.model.http.auth.*;
 import pet.project.spark.model.User;
 import pet.project.spark.model.http.task.CreateTaskRequest;
 import pet.project.spark.model.http.task.CreateTaskResponse;
+import pet.project.spark.model.http.task.GetTaskListResponse;
 import pet.project.spark.usecase.todo.TodoUsecase;
 import pet.project.spark.util.constant.Constant;
 import pet.project.spark.util.session.SessionManager;
@@ -15,6 +17,8 @@ import spark.Request;
 import spark.Response;
 
 import pet.project.spark.util.response.ResponseManager;
+
+import java.util.ArrayList;
 
 public class HttpHandler {
     private static Logger LOG = LoggerFactory.getLogger(HttpHandler.class);
@@ -163,10 +167,22 @@ public class HttpHandler {
         }
     }
 
-    public String getTaskList(Request req, Response res) {
-        String userID = req.attribute("user.id");
-        LOG.info("userID: " + userID);
-        return "get task list";
+    public GetTaskListResponse getTaskList(Request req, Response res) {
+        GetTaskListResponse getTaskListResponse = new GetTaskListResponse();
+        try {
+            int userID = Integer.parseInt(req.attribute(Constant.USER_ID_MW));
+            ArrayList<Task> data = todoUsecase.getTaskList(userID);
+            getTaskListResponse.setSuccess(true);
+            getTaskListResponse.setData(data);
+            ResponseManager.setHeaderJSON(200, res);
+            return getTaskListResponse;
+        } catch (Exception e) {
+            LOG.error("error calling todoUsecase.getTaskList. err: " + e);
+            getTaskListResponse.setSuccess(false);
+            getTaskListResponse.setError(e.toString());
+            ResponseManager.setHeaderJSON(500, res);
+            return getTaskListResponse;
+        }
     }
 
     public CreateTaskResponse createTask(Request req, Response res) {
