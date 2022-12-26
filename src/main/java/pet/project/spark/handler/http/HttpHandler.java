@@ -7,9 +7,7 @@ import pet.project.spark.model.Task;
 import pet.project.spark.model.config.Config;
 import pet.project.spark.model.http.auth.*;
 import pet.project.spark.model.User;
-import pet.project.spark.model.http.task.CreateTaskRequest;
-import pet.project.spark.model.http.task.CreateTaskResponse;
-import pet.project.spark.model.http.task.GetTaskListResponse;
+import pet.project.spark.model.http.task.*;
 import pet.project.spark.usecase.todo.TodoUsecase;
 import pet.project.spark.util.constant.Constant;
 import pet.project.spark.util.session.SessionManager;
@@ -210,6 +208,56 @@ public class HttpHandler {
             createTaskResponse.setError(e.toString());
             ResponseManager.setHeaderJSON(500, res);
             return createTaskResponse;
+        }
+    }
+
+    public UpdateTaskResponse updateTask(Request req, Response res) {
+        UpdateTaskResponse updateTaskResponse = new UpdateTaskResponse();
+        try {
+            UpdateTaskRequest data = gson.fromJson(req.body(), UpdateTaskRequest.class);
+            if (data.getNewTask().equals("")) {
+                updateTaskResponse.setSuccess(false);
+                updateTaskResponse.setError("task can't be empty");
+                ResponseManager.setHeaderJSON(400, res);
+                return updateTaskResponse;
+            }
+
+            int taskID = Integer.parseInt(req.params(":taskID"));
+            if (taskID <= 0) {
+                updateTaskResponse.setSuccess(false);
+                updateTaskResponse.setError("invalid task_id");
+                ResponseManager.setHeaderJSON(400, res);
+                return updateTaskResponse;
+            }
+
+            int userID = Integer.parseInt(req.attribute(Constant.USER_ID_MW));
+            data.setTaskID(taskID);
+            data.setUserID(userID);
+
+            boolean isSuccess = todoUsecase.updateTask(data);
+
+            if (!isSuccess) {
+                updateTaskResponse.setSuccess(false);
+                updateTaskResponse.setError("task_id not found");
+                ResponseManager.setHeaderJSON(404, res);
+                return updateTaskResponse;
+            }
+
+            updateTaskResponse.setSuccess(true);
+            updateTaskResponse.setMessage("task_id: " + taskID + " updated successfully");
+            ResponseManager.setHeaderJSON(200, res);
+            return updateTaskResponse;
+        } catch(NumberFormatException e) {
+            updateTaskResponse.setSuccess(false);
+            updateTaskResponse.setError("invalid task_id format");
+            ResponseManager.setHeaderJSON(400, res);
+            return updateTaskResponse;
+        } catch(Exception e) {
+            LOG.error("error calling todoUsecase.updateTask. err: " + e);
+            updateTaskResponse.setSuccess(false);
+            updateTaskResponse.setError(e.toString());
+            ResponseManager.setHeaderJSON(500, res);
+            return updateTaskResponse;
         }
     }
 }

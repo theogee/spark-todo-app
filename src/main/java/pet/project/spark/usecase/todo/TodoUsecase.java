@@ -10,6 +10,7 @@ import pet.project.spark.model.http.auth.LoginRequest;
 import pet.project.spark.model.User;
 import pet.project.spark.model.http.auth.RegisterRequest;
 import pet.project.spark.model.http.task.CreateTaskRequest;
+import pet.project.spark.model.http.task.UpdateTaskRequest;
 import pet.project.spark.repo.todo.TodoRepo;
 
 import java.util.ArrayList;
@@ -75,6 +76,23 @@ public class TodoUsecase {
             todoRepo.createTask(data.getUserID(), data.getTask());
         } catch (Exception e) {
             LOG.error("error calling todoRepo.createTask. err: " + e);
+            throw e;
+        }
+    }
+
+    public boolean updateTask(UpdateTaskRequest data) throws Exception {
+        try {
+            ArrayList<Task> tasks = todoRepo.getTaskList(data.getUserID());
+            for (Task t : tasks) {
+                if (t.getTaskID() == data.getTaskID()) {
+                   todoRepo.updateTask(data.getTaskID(), data.getNewTask());
+                   return true;
+                }
+            }
+            LOG.error("taskID: " + data.getTaskID() + " not found for userID: " + data.getUserID());
+            return false;
+        } catch (Exception e) {
+            LOG.error(String.format("error updating taskID: %d for userID: %d. err: %s", data.getTaskID(), data.getUserID(), e));
             throw e;
         }
     }

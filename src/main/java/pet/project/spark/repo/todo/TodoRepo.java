@@ -92,4 +92,18 @@ public class TodoRepo {
             throw e;
         }
     }
+
+    public void updateTask(int taskID, String newTask) throws Exception {
+        try {
+            PreparedStatement st = db.getConn().prepareStatement(Query.updateTask);
+            st.setString(1, newTask);
+            st.setInt(2, taskID);
+            st.executeUpdate();
+            st.close();
+            LOG.info(String.format("taskID: %d updated successully", taskID));
+        } catch(java.sql.SQLException e) {
+            LOG.error("error updating task in db. err: " + e);
+            throw e;
+        }
+    }
 }

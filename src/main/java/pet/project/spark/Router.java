@@ -34,6 +34,7 @@ public class Router {
         // task CRUD
         get("/task", httpHandler::getTaskList, gson::toJson);
         post("/task", httpHandler::createTask, gson::toJson);
+        put("/task/:taskID", httpHandler::updateTask, gson::toJson);
 
         // auth
         post("/register", httpHandler::register, gson::toJson);
